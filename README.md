@@ -1,48 +1,80 @@
-# 🤖 AI Developer Hiring Platform — Frontend
+# 🤖 AI Hiring Platform — Frontend
 
-A modern, production-ready AI-powered hiring platform frontend built with Next.js 15, TypeScript, and Tailwind CSS.
+A modern, AI-powered hiring platform built with **Next.js 15** and **TypeScript**. Candidates can browse jobs, create AI-analyzed resumes, and track applications. Recruiters can post jobs, manage candidates, and schedule interviews.
 
-## 🌐 Live Demo
-
-- **Frontend:** https://ai-hiring-platorm.vercel.app
-- **Backend API:** https://ai-hiring-platform-backend-1.onrender.com
-
----
-
-## 🚀 Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 15 + TypeScript |
-| Styling | Tailwind CSS + Shadcn UI |
-| State Management | Zustand |
-| Form Handling | React Hook Form + Zod |
-| HTTP Client | Axios |
-| Deployment | Vercel |
+🔗 **Live Demo:** [ai-hiring-platform-bd.vercel.app](https://ai-hiring-platform-bd.vercel.app)  
+🔗 **Backend Repo:** [ai-hiring-platform-bd-backend](https://github.com/MilonChandraDas/ai-hiring-platform-bd-backend)
 
 ---
 
 ## ✨ Features
 
 ### Candidate
-- ✅ Register & Login
-- ✅ Create Resume with CV upload
-- ✅ Browse all job listings
-- ✅ View job details
-- ✅ Apply for jobs
-- ✅ Track application status
+- 🔐 Register & Login with JWT auth
+- 📄 Create resume with AI scoring (ATS Score + AI Feedback)
+- 💼 Browse and search job listings
+- 📋 Apply to jobs with resume + cover letter
+- ✅ Track application status (Pending → Shortlisted → Hired)
+- 🎙️ View scheduled interviews with meeting links
 
 ### Recruiter
-- ✅ Create company profile
-- ✅ Post job openings
-- ✅ Manage applications
-- ✅ Schedule interviews
+- 🏢 Create and manage company profile
+- 📝 Post job openings
+- 👥 View all candidate applications
+- 📅 Schedule interviews with candidates
 
-### General
-- ✅ Role-based dashboard
-- ✅ Protected routes with middleware
-- ✅ JWT authentication
-- ✅ Responsive design
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| Next.js 15 | React framework (App Router) |
+| TypeScript | Type safety |
+| Tailwind CSS | Styling |
+| Shadcn UI | UI components |
+| Zustand | Auth state management |
+| React Hook Form + Zod | Form validation |
+| Axios | HTTP requests |
+| Sonner | Toast notifications |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js v20+
+- npm
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/MilonChandraDas/ai-hiring-platform-bd.git
+cd ai-hiring-platform-bd
+
+# Install dependencies
+npm install
+
+# Create environment file
+cp .env.example .env.local
+```
+
+### Environment Variables
+
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000
+```
+
+### Run Development Server
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3001](http://localhost:3001) in your browser.
 
 ---
 
@@ -52,90 +84,55 @@ A modern, production-ready AI-powered hiring platform frontend built with Next.j
 src/
 ├── app/
 │   ├── (auth)/
-│   │   ├── login/         — Login page
-│   │   └── register/      — Register page
-│   ├── dashboard/         — Role-based dashboard
+│   │   ├── login/
+│   │   └── register/
+│   ├── dashboard/
 │   ├── jobs/
-│   │   ├── page.tsx       — Job listings
-│   │   ├── create/        — Post a job
-│   │   └── [id]/
-│   │       ├── page.tsx   — Job details
-│   │       └── apply/     — Apply for job
+│   │   ├── [id]/
+│   │   │   ├── page.tsx        # Job Details
+│   │   │   └── apply/          # Apply Form
+│   │   └── create/
 │   ├── companies/
-│   │   └── create/        — Create company
+│   │   ├── create/
+│   │   └── my-company/
 │   ├── resume/
-│   │   └── create/        — Create resume
-│   └── applications/      — My applications
-├── components/ui/         — Shadcn UI components
-├── lib/
-│   └── api.ts             — API URL config
+│   │   └── create/
+│   ├── applications/           # Candidate applications
+│   ├── interviews/             # Candidate interviews
+│   └── recruiter/
+│       └── applications/       # Recruiter applications view
+├── components/
+│   ├── ui/                     # Shadcn components
+│   ├── Navbar.tsx
+│   └── NavbarWrapper.tsx
+├── store/
+│   └── auth.store.ts           # Zustand auth store
 ├── schemas/
-│   └── auth.schema.ts     — Zod validation schemas
-└── store/
-    └── auth.store.ts      — Zustand auth store
+│   └── auth.schema.ts          # Zod schemas
+└── lib/
+    └── api.ts                  # API URL config
 ```
 
 ---
 
-## ⚙️ Local Setup
+## 🌐 Deployment
 
-### Prerequisites
-- Node.js v18+
-- Git
-
-### Installation
+Deployed on **Vercel** with automatic deployments from the `main` branch.
 
 ```bash
-# Clone the repo
-git clone https://github.com/MilonChandraDas/ai-hiring-platform.git
-cd ai-hiring-platform-frontend
-
-# Install dependencies
-npm install
-
-# Setup environment variables
-cp .env.example .env.local
-# Fill in your .env.local values
-
-# Run development server
-npm run dev
-```
-
-### Environment Variables
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3000
+# Build for production
+npm run build
 ```
 
 ---
 
-## 🔐 Authentication Flow
+## 📸 Screenshots
 
-```
-Register → Login → JWT Token → Cookie + Zustand Store
-                                      ↓
-                              Protected Routes (Middleware)
-                                      ↓
-                              Role-based Dashboard
-```
-
----
-
-## 🎨 UI Components
-
-Built with **Shadcn UI** — a collection of beautifully designed, accessible components:
-- Button, Input, Label
-- Card, CardHeader, CardContent
-- Select, SelectTrigger, SelectContent
+> Dashboard, Job listings, Resume AI analysis, Interview scheduling
 
 ---
 
 ## 👨‍💻 Author
 
-Built by **Milon Das** as a production-ready portfolio project demonstrating:
-- Modern Next.js development
-- TypeScript best practices
-- Form validation with Zod
-- State management with Zustand
-- Responsive UI design
-- Cloud deployment
+**Milon Chandra Das**  
+GitHub: [@MilonChandraDas](https://github.com/MilonChandraDas)
