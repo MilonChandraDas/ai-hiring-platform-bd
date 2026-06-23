@@ -50,6 +50,12 @@ export default function Navbar() {
               >
                 Post Job
               </Link>
+              <Link
+                href="/recruiter/applications"
+                className="text-slate-400 hover:text-white text-sm px-3 py-2 rounded-lg hover:bg-white/8 transition-all duration-150"
+              >
+                Applications
+              </Link>
             </>
           )}
 
@@ -66,6 +72,12 @@ export default function Navbar() {
                 className="text-slate-400 hover:text-white text-sm px-3 py-2 rounded-lg hover:bg-white/8 transition-all duration-150"
               >
                 Applications
+              </Link>
+              <Link
+                href="/interviews"
+                className="text-slate-400 hover:text-white text-sm px-3 py-2 rounded-lg hover:bg-white/8 transition-all duration-150"
+              >
+                Interviews
               </Link>
             </>
           )}
