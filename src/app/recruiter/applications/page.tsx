@@ -170,9 +170,11 @@ export default function RecruiterApplicationsPage() {
                         )}
                         {app.resume.skill && (
                           <div className="flex flex-wrap gap-1 mt-2">
-                            {(Array.isArray(app.resume.skill)
-                              ? app.resume.skill
-                              : app.resume.skill.split(",")
+                            {(Array.isArray(app.resume?.skill)
+                              ? (app.resume.skill as string[])
+                              : (
+                                  (app.resume?.skill as unknown as string) || ""
+                                ).split(",")
                             )
                               .slice(0, 4)
                               .map((skill: string, i: number) => (
