@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth.store";
 import { useRouter } from "next/navigation";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Navbar() {
   const { user, logout } = useAuthStore();
@@ -85,6 +86,7 @@ export default function Navbar() {
 
         {/* User info + Logout */}
         <div className="flex gap-3 items-center">
+          <ThemeToggle />
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold">
               {user?.username?.[0]?.toUpperCase()}
