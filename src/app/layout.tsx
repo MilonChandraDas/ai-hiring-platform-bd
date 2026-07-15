@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,10 +32,16 @@ export default function RootLayout({
     >
       
       <body className="min-h-full flex flex-col">
-        <NavbarWrapper/>
-        <Toaster />
-        {children}
-        </body>
+         <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+        >
+          <NavbarWrapper />
+          <Toaster />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
