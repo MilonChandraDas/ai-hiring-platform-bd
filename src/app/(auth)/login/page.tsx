@@ -12,7 +12,7 @@ import { loginSchema, LoginDto } from "@/schemas/auth.schema";
 import { API_URL } from "@/lib/api";
 import { toast } from "sonner";
 import { useState } from "react";
-import { AuthLayout } from "@/app/(auth)/AuthLayout"
+import { AuthLayout } from "@/app/(auth)/AuthLayout";
 import { FormField } from "@/app/(auth)/FromField";
 
 const FEATURES = [
@@ -70,9 +70,9 @@ export default function LoginPage() {
         <>
           {FEATURES.map((feature) => (
             <div key={feature} className="flex items-center gap-3">
-              <div className="h-5 w-5 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center justify-center flex-shrink-0">
+              <div className="h-5 w-5 rounded-full bg-[var(--brand)]/15 border border-[var(--brand)]/30 flex items-center justify-center flex-shrink-0">
                 <svg
-                  className="h-3 w-3 text-violet-400"
+                  className="h-3 w-3 text-[var(--brand-foreground)]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -85,15 +85,17 @@ export default function LoginPage() {
                   />
                 </svg>
               </div>
-              <span className="text-slate-300 text-sm">{feature}</span>
+              <span className="text-muted-foreground text-sm">{feature}</span>
             </div>
           ))}
         </>
       }
     >
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-white mb-1">Welcome back</h2>
-        <p className="text-slate-400 text-sm">
+        <h2 className="text-2xl font-bold text-foreground mb-1">
+          Welcome back
+        </h2>
+        <p className="text-muted-foreground text-sm">
           Sign in to continue to your dashboard
         </p>
       </div>
@@ -103,7 +105,7 @@ export default function LoginPage() {
           <Input
             type="email"
             placeholder="you@example.com"
-            className="h-11 bg-white/5 border-white/10 text-white placeholder:text-slate-600 rounded-xl focus-visible:ring-1 focus-visible:ring-violet-500 focus-visible:border-violet-500"
+            className="h-11 rounded-xl"
             {...register("email")}
           />
         </FormField>
@@ -112,7 +114,7 @@ export default function LoginPage() {
           <Input
             type="password"
             placeholder="••••••••"
-            className="h-11 bg-white/5 border-white/10 text-white placeholder:text-slate-600 rounded-xl focus-visible:ring-1 focus-visible:ring-violet-500 focus-visible:border-violet-500"
+            className="h-11 rounded-xl"
             {...register("password")}
           />
         </FormField>
@@ -151,12 +153,12 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <div className="mt-6 pt-6 border-t border-white/8 text-center">
-        <p className="text-sm text-slate-500">
+      <div className="mt-6 pt-6 border-t border-border text-center">
+        <p className="text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link
             href="/register"
-            className="text-violet-400 hover:text-violet-300 font-medium transition-colors"
+            className="text-violet-500 hover:text-violet-400 font-medium transition-colors"
           >
             Create one
           </Link>

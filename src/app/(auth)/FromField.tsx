@@ -10,7 +10,9 @@ interface FormFieldProps {
 export function FormField({ label, error, children }: FormFieldProps) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-sm font-medium text-slate-300">{label}</Label>
+      <Label className="text-sm font-medium text-muted-foreground">
+        {label}
+      </Label>
       {children}
       {error && <p className="text-xs text-red-400">{error}</p>}
     </div>
