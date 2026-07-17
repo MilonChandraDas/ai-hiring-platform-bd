@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Container } from "@/components/layout/Container";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface AuthLayoutProps {
   badgeText: string;
@@ -26,6 +27,9 @@ export function AuthLayout({
 }: AuthLayoutProps) {
   return (
     <div className="min-h-screen bg-background flex justify-center">
+      <div className="absolute top-6 right-6 z-20">
+        <ThemeToggle />
+      </div>
       <Container className="flex">
         {/* Left Side */}
         <div className="hidden lg:flex flex-col w-1/2 py-14 pr-14 relative overflow-hidden">
