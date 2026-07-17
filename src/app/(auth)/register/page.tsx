@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { AuthLayout } from "@/app/(auth)/AuthLayout";
 import { FormField } from "@/app/(auth)/FromField";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 const ROLE_CARDS = [
   {
@@ -78,12 +79,14 @@ export default function RegisterPage() {
           {ROLE_CARDS.map((card) => (
             <div
               key={card.title}
-              className="flex items-start gap-4 bg-white/4 border border-white/8 rounded-xl p-4"
+              className="flex items-start gap-4 bg-secondary/40 border border-border rounded-xl p-4"
             >
               <div className="text-2xl">{card.icon}</div>
               <div>
-                <p className="text-white font-medium text-sm">{card.title}</p>
-                <p className="text-slate-400 text-xs mt-0.5">
+                <p className="text-foreground font-medium text-sm">
+                  {card.title}
+                </p>
+                <p className="text-muted-foreground text-xs mt-0.5">
                   {card.description}
                 </p>
               </div>
@@ -93,10 +96,10 @@ export default function RegisterPage() {
       }
     >
       <div className="mb-7">
-        <h2 className="text-2xl font-bold text-white mb-1">
+        <h2 className="text-2xl font-bold text-foreground mb-1">
           Create your account
         </h2>
-        <p className="text-slate-400 text-sm">
+        <p className="text-muted-foreground text-sm">
           Start your journey — it only takes a minute
         </p>
       </div>
@@ -106,7 +109,7 @@ export default function RegisterPage() {
           <Input
             type="text"
             placeholder="johndoe"
-            className="h-11 bg-white/5 border-white/10 text-white placeholder:text-slate-600 rounded-xl focus-visible:ring-1 focus-visible:ring-violet-500 focus-visible:border-violet-500"
+            className="h-11 rounded-xl"
             {...register("username")}
           />
         </FormField>
@@ -115,7 +118,7 @@ export default function RegisterPage() {
           <Input
             type="email"
             placeholder="you@example.com"
-            className="h-11 bg-white/5 border-white/10 text-white placeholder:text-slate-600 rounded-xl focus-visible:ring-1 focus-visible:ring-violet-500 focus-visible:border-violet-500"
+            className="h-11 rounded-xl"
             {...register("email")}
           />
         </FormField>
@@ -124,7 +127,7 @@ export default function RegisterPage() {
           <Input
             type="password"
             placeholder="••••••••"
-            className="h-11 bg-white/5 border-white/10 text-white placeholder:text-slate-600 rounded-xl focus-visible:ring-1 focus-visible:ring-violet-500 focus-visible:border-violet-500"
+            className="h-11 rounded-xl"
             {...register("password")}
           />
         </FormField>
@@ -135,23 +138,14 @@ export default function RegisterPage() {
               setValue("role", value as "CANDIDATE" | "RECRUITER")
             }
           >
-            <SelectTrigger className="h-11 bg-white/5 border-white/10 text-white rounded-xl focus:ring-1 focus:ring-violet-500">
-              <SelectValue
-                placeholder="Select your role"
-                className="text-slate-600"
-              />
+            <SelectTrigger className="h-11 w-full rounded-xl">
+              <SelectValue placeholder="Select your role" />
             </SelectTrigger>
-            <SelectContent className="bg-[#0f1729] border-white/10 text-white">
-              <SelectItem
-                value="CANDIDATE"
-                className="focus:bg-white/10 focus:text-white"
-              >
+            <SelectContent>
+              <SelectItem value="CANDIDATE">
                 👨‍💻 Candidate — Looking for jobs
               </SelectItem>
-              <SelectItem
-                value="RECRUITER"
-                className="focus:bg-white/10 focus:text-white"
-              >
+              <SelectItem value="RECRUITER">
                 🏢 Recruiter — Hiring developers
               </SelectItem>
             </SelectContent>
@@ -165,25 +159,7 @@ export default function RegisterPage() {
         >
           {loading ? (
             <span className="flex items-center gap-2">
-              <svg
-                className="animate-spin h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8z"
-                />
-              </svg>
+              <LoadingSpinner />
               Creating account...
             </span>
           ) : (
@@ -192,12 +168,12 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <div className="mt-6 pt-6 border-t border-white/8 text-center">
-        <p className="text-sm text-slate-500">
+      <div className="mt-6 pt-6 border-t border-border text-center">
+        <p className="text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="text-violet-400 hover:text-violet-300 font-medium transition-colors"
+            className="text-violet-500 hover:text-violet-400 font-medium transition-colors"
           >
             Sign in
           </Link>
