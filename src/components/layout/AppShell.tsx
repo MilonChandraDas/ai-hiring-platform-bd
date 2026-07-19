@@ -2,13 +2,14 @@ import type { ReactNode } from "react";
 import { Container } from "@/components/layout/Container";
 
 interface AppShellProps {
+  /** পূর্ণ প্রস্থে (edge-to-edge border সহ) দেখানোর জন্য, যেমন page title + action button */
+  header?: ReactNode;
   children: ReactNode;
 }
 
-export function AppShell({ children }: AppShellProps) {
+export function AppShell({ header, children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Layer 1: Background decoration — full-bleed, edge-to-edge */}
       <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] bg-[var(--brand)]/10 rounded-full blur-3xl pointer-events-none z-0" />
       <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-muted rounded-full blur-3xl pointer-events-none z-0" />
       <div
@@ -19,8 +20,12 @@ export function AppShell({ children }: AppShellProps) {
         }}
       />
 
-      {/* Layer 2: Content — Container দিয়ে বাঁধা, decoration এর ওপরে */}
       <div className="relative z-10">
+        {header && (
+          <div className="border-b border-border">
+            <Container className="py-12">{header}</Container>
+          </div>
+        )}
         <Container className="py-14">{children}</Container>
       </div>
     </div>

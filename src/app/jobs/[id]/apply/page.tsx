@@ -6,6 +6,25 @@ import { useParams, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import { API_URL } from "@/lib/api";
 import { toast } from "sonner";
+import { AppShell } from "@/components/layout/AppShell";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { FormField } from "@/app/(auth)/FromField";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+interface Resume {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export default function ApplyPage() {
   const { id } = useParams();
@@ -13,7 +32,7 @@ export default function ApplyPage() {
   const { token } = useAuthStore();
   const [resumeId, setResumeId] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
-  const [resumes, setResumes] = useState<any[]>([]);
+  const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetchingResumes, setFetchingResumes] = useState(true);
 
@@ -31,7 +50,7 @@ export default function ApplyPage() {
       }
     };
     fetchResumes();
-  }, []);
+  }, [token]);
 
   const handleApply = async () => {
     if (!resumeId) {
@@ -42,14 +61,8 @@ export default function ApplyPage() {
     try {
       await axios.post(
         `${API_URL}/applications`,
-        {
-          jobId: id,
-          resumeId,
-          coverLetter,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
+        { jobId: id, resumeId, coverLetter },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       toast.success("Applied successfully!");
       router.push("/dashboard");
@@ -60,153 +73,98 @@ export default function ApplyPage() {
     }
   };
 
-  if (fetchingResumes)
+  if (fetchingResumes) {
     return (
-      <div className="min-h-screen bg-[#080d1a] flex items-center justify-center">
-        <div className="flex items-center gap-3 text-slate-400">
-          <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v8z"
-            />
-          </svg>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex items-center gap-3 text-muted-foreground">
+          <LoadingSpinner className="h-5 w-5" />
           Loading...
         </div>
       </div>
     );
+  }
 
   return (
-    <div className="min-h-screen bg-[#080d1a] relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-[-100px] right-[-100px] w-[300px] h-[300px] bg-cyan-500/8 rounded-full blur-3xl pointer-events-none" />
+    <AppShell>
+      <div className="min-h-[70vh] flex items-center justify-center">
+        <div className="w-full max-w-lg bg-card border border-border rounded-2xl p-8">
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-foreground mb-1">
+              Apply for Job
+            </h1>
+            <p className="text-muted-foreground text-sm">
+              Select your resume and add a cover letter
+            </p>
+          </div>
 
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-14">
-        <div className="w-full max-w-lg">
-          <div className="bg-white/5 border border-white/10 backdrop-blur-2xl rounded-2xl p-8">
-            {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-2xl font-bold text-white mb-1">
-                Apply for Job
-              </h1>
-              <p className="text-slate-400 text-sm">
-                Select your resume and add a cover letter
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              {/* Resume select */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">
-                  Select Resume <span className="text-red-400">*</span>
-                </label>
-
-                {resumes.length === 0 ? (
-                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-5 text-center">
-                    <p className="text-red-400 text-sm font-medium mb-1">
-                      No resume found
-                    </p>
-                    <p className="text-slate-500 text-xs mb-3">
-                      You need a resume before applying
-                    </p>
-                    <button
-                      onClick={() => router.push("/resume/create")}
-                      className="text-violet-400 hover:text-violet-300 text-sm font-medium transition-colors"
-                    >
-                      Create a resume first →
-                    </button>
-                  </div>
-                ) : (
-                  <select
-                    className="w-full bg-white/5 border border-white/10 text-white rounded-xl p-3 text-sm focus:outline-none focus:ring-1 focus:ring-violet-500 focus:border-violet-500 transition-all"
-                    onChange={(e) => setResumeId(e.target.value)}
-                    style={{ colorScheme: "dark" }}
+          <div className="space-y-6">
+            <FormField label="Select Resume">
+              {resumes.length === 0 ? (
+                <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-5 text-center">
+                  <p className="text-destructive text-sm font-medium mb-1">
+                    No resume found
+                  </p>
+                  <p className="text-muted-foreground text-xs mb-3">
+                    You need a resume before applying
+                  </p>
+                  <button
+                    onClick={() => router.push("/resume/create")}
+                    className="text-violet-500 hover:text-violet-400 text-sm font-medium transition-colors"
                   >
-                    <option value="" className="bg-[#0f1729] text-slate-400">
-                      Select a resume
-                    </option>
-                    {resumes.map((resume: any) => (
-                      <option
-                        key={resume.id}
-                        value={resume.id}
-                        className="bg-[#0f1729] text-white"
-                      >
+                    Create a resume first →
+                  </button>
+                </div>
+              ) : (
+                <Select onValueChange={setResumeId}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a resume" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {resumes.map((resume) => (
+                      <SelectItem key={resume.id} value={resume.id}>
                         {resume.name} — {resume.email}
-                      </option>
+                      </SelectItem>
                     ))}
-                  </select>
+                  </SelectContent>
+                </Select>
+              )}
+            </FormField>
+
+            <FormField label="Cover Letter (optional)">
+              <Textarea
+                rows={4}
+                placeholder="Why are you interested in this job? What makes you a great fit?"
+                value={coverLetter}
+                onChange={(e) => setCoverLetter(e.target.value)}
+              />
+            </FormField>
+
+            <div className="flex gap-3 pt-2">
+              <Button
+                variant="secondary"
+                onClick={() => router.back()}
+                className="flex-1 h-11"
+              >
+                ← Back
+              </Button>
+              <Button
+                onClick={handleApply}
+                disabled={loading || resumes.length === 0}
+                className="flex-1 h-11 bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white gap-2"
+              >
+                {loading ? (
+                  <>
+                    <LoadingSpinner />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Application"
                 )}
-              </div>
-
-              {/* Cover letter */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">
-                  Cover Letter{" "}
-                  <span className="text-slate-600">(optional)</span>
-                </label>
-                <textarea
-                  rows={4}
-                  placeholder="Why are you interested in this job? What makes you a great fit?"
-                  value={coverLetter}
-                  onChange={(e) => setCoverLetter(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 text-white placeholder:text-slate-600 rounded-xl p-3 text-sm focus:outline-none focus:ring-1 focus:ring-violet-500 focus:border-violet-500 transition-all resize-none"
-                />
-              </div>
-
-              {/* Buttons */}
-              <div className="flex gap-3 pt-2">
-                <button
-                  onClick={() => router.back()}
-                  className="flex-1 h-11 bg-white/5 hover:bg-white/10 text-slate-300 text-sm rounded-xl border border-white/10 transition-all duration-200"
-                >
-                  ← Back
-                </button>
-                <button
-                  onClick={handleApply}
-                  disabled={loading || resumes.length === 0}
-                  className="flex-1 h-11 bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  {loading ? (
-                    <>
-                      <svg
-                        className="animate-spin h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8v8z"
-                        />
-                      </svg>
-                      Submitting...
-                    </>
-                  ) : (
-                    "Submit Application"
-                  )}
-                </button>
-              </div>
+              </Button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 }
