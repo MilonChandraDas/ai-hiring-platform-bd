@@ -4,6 +4,8 @@ import { useAuthStore } from "@/store/auth.store";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { API_URL } from "@/lib/api";
+import { AppShell } from "@/components/layout/AppShell";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
@@ -30,8 +32,6 @@ export default function DashboardPage() {
       desc: "Create or update your resume to stand out",
       link: "/resume/create",
       btn: "Create Resume",
-      accent: "from-violet-500/20 to-violet-500/5",
-      border: "border-violet-500/20",
     },
     {
       emoji: "💼",
@@ -39,8 +39,6 @@ export default function DashboardPage() {
       desc: "Explore AI-matched job opportunities",
       link: "/jobs",
       btn: "View Jobs",
-      accent: "from-cyan-500/20 to-cyan-500/5",
-      border: "border-cyan-500/20",
     },
     {
       emoji: "📋",
@@ -48,8 +46,6 @@ export default function DashboardPage() {
       desc: "Track the status of your applications",
       link: "/applications",
       btn: "View Applications",
-      accent: "from-emerald-500/20 to-emerald-500/5",
-      border: "border-emerald-500/20",
     },
   ];
 
@@ -62,8 +58,6 @@ export default function DashboardPage() {
         : "Set up your company profile",
       link: hasCompany ? "/companies/my-company" : "/companies/create",
       btn: hasCompany ? "View Company" : "Create Company",
-      accent: "from-violet-500/20 to-violet-500/5",
-      border: "border-violet-500/20",
     },
     {
       emoji: "📝",
@@ -71,8 +65,6 @@ export default function DashboardPage() {
       desc: "Create a new job opening for developers",
       link: "/jobs/create",
       btn: "Post Job",
-      accent: "from-cyan-500/20 to-cyan-500/5",
-      border: "border-cyan-500/20",
     },
     {
       emoji: "👥",
@@ -80,77 +72,51 @@ export default function DashboardPage() {
       desc: "View all active job listings",
       link: "/jobs",
       btn: "View Jobs",
-      accent: "from-emerald-500/20 to-emerald-500/5",
-      border: "border-emerald-500/20",
     },
   ];
 
   const cards = user?.role === "CANDIDATE" ? candidateCards : recruiterCards;
 
   return (
-    <div className="min-h-screen bg-[#080d1a] relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Subtle grid */}
-      <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 py-14">
-        {/* Header */}
-        <div className="mb-12">
-          <div className="inline-block text-xs font-medium text-violet-400 bg-violet-400/10 border border-violet-400/20 px-3 py-1 rounded-full mb-4 tracking-widest uppercase">
-            {user?.role}
-          </div>
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Welcome back,{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400">
-              {user?.username}
-            </span>
-          </h1>
-          <p className="text-slate-400">
-            {user?.role === "CANDIDATE"
-              ? "Your AI-powered job search dashboard"
-              : "Manage your company and job postings"}
-          </p>
+    <AppShell>
+      {/* Header */}
+      <div className="mb-12">
+        <div className="inline-block text-xs font-medium text-[var(--brand-foreground)] bg-[var(--brand)]/15 border border-[var(--brand)]/30 px-3 py-1 rounded-full mb-4 tracking-widest uppercase">
+          {user?.role}
         </div>
-
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              className={`relative bg-white/5 border ${card.border} rounded-2xl p-6 backdrop-blur hover:bg-white/8 transition-all duration-200 group overflow-hidden`}
-            >
-              {/* Card glow */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${card.accent} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl`}
-              />
-
-              <div className="relative z-10">
-                <div className="text-3xl mb-4">{card.emoji}</div>
-                <h2 className="text-lg font-semibold text-white mb-1">
-                  {card.title}
-                </h2>
-                <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-                  {card.desc}
-                </p>
-                <Link href={card.link}>
-                  <button className="w-full bg-white/10 hover:bg-white/15 text-white text-sm py-2.5 rounded-xl border border-white/10 transition-all duration-200 font-medium">
-                    {card.btn} →
-                  </button>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+        <h1 className="text-4xl font-bold text-foreground mb-2">
+          Welcome back,{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400">
+            {user?.username}
+          </span>
+        </h1>
+        <p className="text-muted-foreground">
+          {user?.role === "CANDIDATE"
+            ? "Your AI-powered job search dashboard"
+            : "Manage your company and job postings"}
+        </p>
       </div>
-    </div>
+
+      {/* Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {cards.map((card) => (
+          <div
+            key={card.title}
+            className="bg-card border border-border rounded-2xl p-6 hover:bg-secondary/40 transition-all duration-200"
+          >
+            <div className="text-3xl mb-4">{card.emoji}</div>
+            <h2 className="text-lg font-semibold text-foreground mb-1">
+              {card.title}
+            </h2>
+            <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+              {card.desc}
+            </p>
+            <Button asChild variant="secondary" className="w-full h-10">
+              <Link href={card.link}>{card.btn} →</Link>
+            </Button>
+          </div>
+        ))}
+      </div>
+    </AppShell>
   );
 }
