@@ -5,6 +5,9 @@ import axios from "axios";
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth.store";
 import { API_URL } from "@/lib/api";
+import { AppShell } from "@/components/layout/AppShell";
+import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 interface Application {
   id: string;
@@ -15,9 +18,7 @@ interface Application {
     title: string;
     location: string;
     jobType: string;
-    company: {
-      name: string;
-    };
+    company: { name: string };
   };
 }
 
@@ -26,27 +27,30 @@ const statusConfig: Record<
   { style: string; label: string; emoji: string }
 > = {
   PENDING: {
-    style: "bg-slate-500/20 text-slate-300 border border-slate-500/30",
+    style: "bg-secondary text-muted-foreground border border-border",
     label: "Pending Review",
     emoji: "⏳",
   },
   REVIEWED: {
-    style: "bg-blue-500/20 text-blue-300 border border-blue-500/30",
+    style:
+      "bg-blue-500/10 text-blue-600 dark:text-blue-300 border border-blue-500/20",
     label: "Reviewed",
     emoji: "👀",
   },
   SHORTLISTED: {
-    style: "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30",
+    style:
+      "bg-yellow-500/10 text-yellow-700 dark:text-yellow-300 border border-yellow-500/20",
     label: "Shortlisted",
     emoji: "⭐",
   },
   REJECTED: {
-    style: "bg-red-500/20 text-red-300 border border-red-500/30",
+    style: "bg-destructive/10 text-destructive border border-destructive/20",
     label: "Not Selected",
     emoji: "❌",
   },
   HIRED: {
-    style: "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30",
+    style:
+      "bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 border border-emerald-500/20",
     label: "Hired!",
     emoji: "✅",
   },
@@ -73,75 +77,59 @@ export default function ApplicationsPage() {
     if (token) fetchApplications();
   }, [token]);
 
-  if (loading)
+  if (loading) {
     return (
-      <div className="min-h-screen bg-[#080d1a] flex items-center justify-center">
-        <div className="flex items-center gap-3 text-slate-400">
-          <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v8z"
-            />
-          </svg>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex items-center gap-3 text-muted-foreground">
+          <LoadingSpinner className="h-5 w-5" />
           Loading applications...
         </div>
       </div>
     );
+  }
 
   return (
-    <div className="min-h-screen bg-[#080d1a] relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-[-100px] right-[-100px] w-[300px] h-[300px] bg-cyan-500/8 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="relative z-10 max-w-3xl mx-auto px-6 py-14">
+    <AppShell>
+      <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1 className="text-3xl font-bold text-foreground mb-2">
             My Applications
           </h1>
-          <p className="text-slate-400">
-            Track the status of jobs you've applied to
+          <p className="text-muted-foreground">
+            Track the status of jobs you&apos;ve applied to
           </p>
         </div>
 
         {applications.length === 0 ? (
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center backdrop-blur">
+          <div className="bg-card border border-border rounded-2xl p-12 text-center">
             <div className="text-4xl mb-4">📋</div>
-            <p className="text-slate-300 font-medium mb-1">
+            <p className="text-foreground font-medium mb-1">
               No applications yet
             </p>
-            <p className="text-slate-500 text-sm mb-6">
+            <p className="text-muted-foreground text-sm mb-6">
               Start applying to jobs and track your progress here
             </p>
-            <Link href="/jobs">
-              <button className="bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white text-sm px-6 py-2.5 rounded-xl transition-all duration-200 font-medium">
-                Browse Jobs →
-              </button>
-            </Link>
+            <Button
+              asChild
+              className="bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white h-10 px-6"
+            >
+              <Link href="/jobs">Browse Jobs →</Link>
+            </Button>
           </div>
         ) : (
           <div className="space-y-4">
             {applications.map((app) => (
               <div
                 key={app.id}
-                className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur hover:bg-white/8 transition-all duration-200"
+                className="bg-card border border-border rounded-2xl p-6 hover:bg-secondary/40 transition-all duration-200"
               >
                 <div className="flex justify-between items-start gap-4">
                   <div>
-                    <h2 className="text-lg font-semibold text-white">
+                    <h2 className="text-lg font-semibold text-foreground">
                       {app.job.title}
                     </h2>
-                    <p className="text-slate-400 text-sm mt-1">
+                    <p className="text-muted-foreground text-sm mt-1">
                       {app.job.company?.name} • {app.job.location}
                     </p>
                   </div>
@@ -154,13 +142,13 @@ export default function ApplicationsPage() {
                 </div>
 
                 {app.coverLetter && (
-                  <p className="text-slate-400 text-sm mt-3 line-clamp-2 leading-relaxed border-l-2 border-white/10 pl-3">
+                  <p className="text-muted-foreground text-sm mt-3 line-clamp-2 leading-relaxed border-l-2 border-border pl-3">
                     {app.coverLetter}
                   </p>
                 )}
 
-                <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/8">
-                  <p className="text-slate-600 text-xs">
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
+                  <p className="text-muted-foreground/70 text-xs">
                     Applied on{" "}
                     {new Date(app.createdAt).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -168,7 +156,7 @@ export default function ApplicationsPage() {
                       day: "numeric",
                     })}
                   </p>
-                  <span className="text-xs text-slate-500 bg-white/5 px-2.5 py-1 rounded-lg border border-white/8">
+                  <span className="text-xs text-muted-foreground bg-secondary/60 px-2.5 py-1 rounded-lg border border-border">
                     {app.job.jobType}
                   </span>
                 </div>
@@ -177,6 +165,6 @@ export default function ApplicationsPage() {
           </div>
         )}
       </div>
-    </div>
+    </AppShell>
   );
 }
